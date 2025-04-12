@@ -566,6 +566,9 @@
      <string>Network</string>
     </property>
     <addaction name="actionLocalhost"/>
+    <addaction name="actionLAN"/>
+    <addaction name="actionDirect_Network"/>
+    <addaction name="actionDisconnect"/>
    </widget>
    <addaction name="menuFILE"/>
    <addaction name="menuARX"/>
@@ -613,6 +616,24 @@
   <action name="actionLocalhost">
    <property name="text">
     <string>Localhost</string>
+   </property>
+  </action>
+  <action name="actionLAN">
+   <property name="text">
+    <string>LAN</string>
+   </property>
+  </action>
+  <action name="actionDirect_Network">
+   <property name="text">
+    <string>Direct Network</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
  </widget>

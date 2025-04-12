@@ -44,6 +44,9 @@ public:
     QAction *actionLOCALHOST_2;
     QAction *actionLOCALHOST_3;
     QAction *actionLocalhost;
+    QAction *actionLAN;
+    QAction *actionDirect_Network;
+    QAction *actionDisconnect;
     QWidget *centralwidget;
     QFormLayout *formLayout_5;
     QVBoxLayout *verticalLayout_3;
@@ -140,6 +143,13 @@ public:
         actionLOCALHOST_3->setObjectName("actionLOCALHOST_3");
         actionLocalhost = new QAction(MainWindow);
         actionLocalhost->setObjectName("actionLocalhost");
+        actionLAN = new QAction(MainWindow);
+        actionLAN->setObjectName("actionLAN");
+        actionDirect_Network = new QAction(MainWindow);
+        actionDirect_Network->setObjectName("actionDirect_Network");
+        actionDisconnect = new QAction(MainWindow);
+        actionDisconnect->setObjectName("actionDisconnect");
+        actionDisconnect->setVisible(false);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         formLayout_5 = new QFormLayout(centralwidget);
@@ -485,6 +495,9 @@ public:
         menuFILE->addAction(actionLOAD_FROM_FILE);
         menuARX->addAction(actionSET);
         menuNetwork->addAction(actionLocalhost);
+        menuNetwork->addAction(actionLAN);
+        menuNetwork->addAction(actionDirect_Network);
+        menuNetwork->addAction(actionDisconnect);
 
         retranslateUi(MainWindow);
 
@@ -502,6 +515,9 @@ public:
         actionLOCALHOST_2->setText(QCoreApplication::translate("MainWindow", "LOCALHOST", nullptr));
         actionLOCALHOST_3->setText(QCoreApplication::translate("MainWindow", "LOCALHOST", nullptr));
         actionLocalhost->setText(QCoreApplication::translate("MainWindow", "Localhost", nullptr));
+        actionLAN->setText(QCoreApplication::translate("MainWindow", "LAN", nullptr));
+        actionDirect_Network->setText(QCoreApplication::translate("MainWindow", "Direct Network", nullptr));
+        actionDisconnect->setText(QCoreApplication::translate("MainWindow", "Disconnect", nullptr));
         startButton->setText(QCoreApplication::translate("MainWindow", "START", nullptr));
         stopButton->setText(QCoreApplication::translate("MainWindow", "STOP", nullptr));
         actualizeButton->setText(QCoreApplication::translate("MainWindow", "ACTUALIZE", nullptr));
