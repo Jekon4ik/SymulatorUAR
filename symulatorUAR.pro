@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -16,6 +16,7 @@ SOURCES += \
     SetpointGenerator.cpp \
     Simualtor.cpp \
     SimulatorMemento.cpp \
+    connectiondialog.cpp \
     dialogarx.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -29,11 +30,13 @@ HEADERS += \
     SetpointGenerator.h \
     Simulator.h \
     SimulatorMemento.h \
+    connectiondialog.h \
     dialogarx.h \
     mainwindow.h \
     qcustomplot.h
 
 FORMS += \
+    connectiondialog.ui \
     dialogarx.ui \
     mainwindow.ui
 

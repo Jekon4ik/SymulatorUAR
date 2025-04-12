@@ -359,7 +359,74 @@ void MainWindow::on_actionLOAD_FROM_FILE_triggered()
         this->BtextField = result;
         this->kField = facade->getActualArxK();
     }
-
 }
 
+void MainWindow::on_actionLocalhost_triggered()
+{
+    ConnectionDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        ConnectionMode mode = dialog.selectedMode();
+        if (mode == ServerMode) {
+            startServer();
+        } else if (mode == ClientMode) {
+            startClient();
+        }
+    }
+}
 
+void MainWindow::startNetworkMode()
+{
+    // Możesz ustawić tryb klienta lub serwera w zależności od potrzeb
+    clientSocket = new QTcpSocket(this);
+    clientSocket->connectToHost(QHostAddress::LocalHost, 12345);
+
+    connect(clientSocket, &QTcpSocket::connected, this, []() {
+        qDebug() << "Connected to server!";
+    });
+
+    connect(clientSocket, &QTcpSocket::readyRead, this, [this]() {
+        QByteArray data = clientSocket->readAll();
+        qDebug() << "Received from server:" << data;
+    });
+}
+void MainWindow::stopNetworkMode()
+{
+    if (clientSocket) {
+        clientSocket->disconnectFromHost();
+        clientSocket->deleteLater();
+        clientSocket = nullptr;
+    }
+}
+
+void MainWindow::startClient() {
+    clientSocket = new QTcpSocket(this);
+    connect(clientSocket, &QTcpSocket::connected, this, [=]() {
+        qDebug() << "[CLIENT] Connected to server!";
+        clientSocket->write("Hello from client");
+    });
+
+    connect(clientSocket, &QTcpSocket::readyRead, [=]() {
+        QByteArray data = clientSocket->readAll();
+        qDebug() << "[CLIENT] Received:" << data;
+    });
+
+    clientSocket->connectToHost(QHostAddress::LocalHost, 12345);
+}
+
+void MainWindow::startServer() {
+    server = new QTcpServer(this);
+    connect(server, &QTcpServer::newConnection, this, [=]() {
+        QTcpSocket *client = server->nextPendingConnection();
+        connect(client, &QTcpSocket::readyRead, [=]() {
+            QByteArray data = client->readAll();
+            qDebug() << "[SERVER] Received:" << data;
+        });
+        qDebug() << "[SERVER] Client connected!";
+    });
+
+    if (server->listen(QHostAddress::LocalHost, 12345)) {
+        qDebug() << "[SERVER] Listening on port 12345";
+    } else {
+        qDebug() << "[SERVER] Failed to start:" << server->errorString();
+    }
+}

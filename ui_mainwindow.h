@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 6.7.3
+** Created by: Qt User Interface Compiler version 6.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -39,16 +39,21 @@ public:
     QAction *actionSAVE_TO_FILE;
     QAction *actionLOAD_FROM_FILE;
     QAction *actionSET;
+    QAction *actionNetwork;
+    QAction *actionLOCALHOST;
+    QAction *actionLOCALHOST_2;
+    QAction *actionLOCALHOST_3;
+    QAction *actionLocalhost;
     QWidget *centralwidget;
     QFormLayout *formLayout_5;
     QVBoxLayout *verticalLayout_3;
     QGridLayout *gridLayout;
-    QPushButton *actualizeButton;
-    QPushButton *resetButton;
-    QSpacerItem *verticalSpacer_16;
-    QPushButton *stopButton;
-    QPushButton *startButton;
     QSpacerItem *verticalSpacer_17;
+    QPushButton *startButton;
+    QPushButton *stopButton;
+    QPushButton *actualizeButton;
+    QSpacerItem *verticalSpacer_16;
+    QPushButton *resetButton;
     QSpacerItem *verticalSpacer_15;
     QFormLayout *formLayout;
     QLabel *label;
@@ -109,6 +114,7 @@ public:
     QMenuBar *menubar;
     QMenu *menuFILE;
     QMenu *menuARX;
+    QMenu *menuNetwork;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -124,6 +130,16 @@ public:
         actionLOAD_FROM_FILE->setObjectName("actionLOAD_FROM_FILE");
         actionSET = new QAction(MainWindow);
         actionSET->setObjectName("actionSET");
+        actionNetwork = new QAction(MainWindow);
+        actionNetwork->setObjectName("actionNetwork");
+        actionLOCALHOST = new QAction(MainWindow);
+        actionLOCALHOST->setObjectName("actionLOCALHOST");
+        actionLOCALHOST_2 = new QAction(MainWindow);
+        actionLOCALHOST_2->setObjectName("actionLOCALHOST_2");
+        actionLOCALHOST_3 = new QAction(MainWindow);
+        actionLOCALHOST_3->setObjectName("actionLOCALHOST_3");
+        actionLocalhost = new QAction(MainWindow);
+        actionLocalhost->setObjectName("actionLocalhost");
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         formLayout_5 = new QFormLayout(centralwidget);
@@ -132,33 +148,33 @@ public:
         verticalLayout_3->setObjectName("verticalLayout_3");
         gridLayout = new QGridLayout();
         gridLayout->setObjectName("gridLayout");
-        actualizeButton = new QPushButton(centralwidget);
-        actualizeButton->setObjectName("actualizeButton");
+        verticalSpacer_17 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 
-        gridLayout->addWidget(actualizeButton, 4, 0, 1, 2);
-
-        resetButton = new QPushButton(centralwidget);
-        resetButton->setObjectName("resetButton");
-
-        gridLayout->addWidget(resetButton, 2, 0, 1, 2);
-
-        verticalSpacer_16 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        gridLayout->addItem(verticalSpacer_16, 3, 0, 1, 1);
-
-        stopButton = new QPushButton(centralwidget);
-        stopButton->setObjectName("stopButton");
-
-        gridLayout->addWidget(stopButton, 0, 1, 1, 1);
+        gridLayout->addItem(verticalSpacer_17, 1, 0, 1, 1);
 
         startButton = new QPushButton(centralwidget);
         startButton->setObjectName("startButton");
 
         gridLayout->addWidget(startButton, 0, 0, 1, 1);
 
-        verticalSpacer_17 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+        stopButton = new QPushButton(centralwidget);
+        stopButton->setObjectName("stopButton");
 
-        gridLayout->addItem(verticalSpacer_17, 1, 0, 1, 1);
+        gridLayout->addWidget(stopButton, 0, 1, 1, 1);
+
+        actualizeButton = new QPushButton(centralwidget);
+        actualizeButton->setObjectName("actualizeButton");
+
+        gridLayout->addWidget(actualizeButton, 4, 0, 1, 2);
+
+        verticalSpacer_16 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        gridLayout->addItem(verticalSpacer_16, 3, 0, 1, 1);
+
+        resetButton = new QPushButton(centralwidget);
+        resetButton->setObjectName("resetButton");
+
+        gridLayout->addWidget(resetButton, 2, 0, 1, 2);
 
 
         verticalLayout_3->addLayout(gridLayout);
@@ -450,11 +466,13 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1100, 21));
+        menubar->setGeometry(QRect(0, 0, 1100, 25));
         menuFILE = new QMenu(menubar);
         menuFILE->setObjectName("menuFILE");
         menuARX = new QMenu(menubar);
         menuARX->setObjectName("menuARX");
+        menuNetwork = new QMenu(menubar);
+        menuNetwork->setObjectName("menuNetwork");
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -462,9 +480,11 @@ public:
 
         menubar->addAction(menuFILE->menuAction());
         menubar->addAction(menuARX->menuAction());
+        menubar->addAction(menuNetwork->menuAction());
         menuFILE->addAction(actionSAVE_TO_FILE);
         menuFILE->addAction(actionLOAD_FROM_FILE);
         menuARX->addAction(actionSET);
+        menuNetwork->addAction(actionLocalhost);
 
         retranslateUi(MainWindow);
 
@@ -477,10 +497,15 @@ public:
         actionSAVE_TO_FILE->setText(QCoreApplication::translate("MainWindow", "SAVE TO FILE", nullptr));
         actionLOAD_FROM_FILE->setText(QCoreApplication::translate("MainWindow", "LOAD FROM FILE", nullptr));
         actionSET->setText(QCoreApplication::translate("MainWindow", "SET", nullptr));
+        actionNetwork->setText(QCoreApplication::translate("MainWindow", "Localhost", nullptr));
+        actionLOCALHOST->setText(QCoreApplication::translate("MainWindow", "LOCALHOST", nullptr));
+        actionLOCALHOST_2->setText(QCoreApplication::translate("MainWindow", "LOCALHOST", nullptr));
+        actionLOCALHOST_3->setText(QCoreApplication::translate("MainWindow", "LOCALHOST", nullptr));
+        actionLocalhost->setText(QCoreApplication::translate("MainWindow", "Localhost", nullptr));
+        startButton->setText(QCoreApplication::translate("MainWindow", "START", nullptr));
+        stopButton->setText(QCoreApplication::translate("MainWindow", "STOP", nullptr));
         actualizeButton->setText(QCoreApplication::translate("MainWindow", "ACTUALIZE", nullptr));
         resetButton->setText(QCoreApplication::translate("MainWindow", "RESET", nullptr));
-        stopButton->setText(QCoreApplication::translate("MainWindow", "STOP", nullptr));
-        startButton->setText(QCoreApplication::translate("MainWindow", "START", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "K", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Ti", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "Td", nullptr));
@@ -500,6 +525,7 @@ public:
         label_14->setText(QCoreApplication::translate("MainWindow", "CONSTANT", nullptr));
         menuFILE->setTitle(QCoreApplication::translate("MainWindow", "FILE", nullptr));
         menuARX->setTitle(QCoreApplication::translate("MainWindow", "ARX", nullptr));
+        menuNetwork->setTitle(QCoreApplication::translate("MainWindow", "Network", nullptr));
     } // retranslateUi
 
 };

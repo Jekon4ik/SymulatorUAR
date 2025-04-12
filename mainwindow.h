@@ -6,6 +6,9 @@
 #include <QVector>
 #include "Facade.h"
 #include "dialogarx.h"
+#include <QTcpSocket>
+#include <QTcpServer>
+#include "connectiondialog.h"
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -14,6 +17,12 @@ namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+
+enum class AppMode
+{
+    NetworkMode,
+    LocalMode
+};
 
 class MainWindow : public QMainWindow
 {
@@ -51,14 +60,24 @@ private slots:
 
     void on_actionLOAD_FROM_FILE_triggered();
 
+    void on_actionLocalhost_triggered();
+
+    void startNetworkMode();
+    void stopNetworkMode();
+    void startServer();
+    void startClient();
+
 private:
     Ui::MainWindow *ui;
     Facade *facade;
     DialogARX *arxDialog;
-
+    AppMode currentMode = AppMode::LocalMode;
     QString AtextField = "-0.4";
     QString BtextField = "0.6";
     int kField = 1;
     double noiseField = 0;
+    QTcpSocket *clientSocket = nullptr;
+    QTcpServer *server = nullptr;
+    ConnectionDialog *conDialog;
 };
 #endif // MAINWINDOW_H
