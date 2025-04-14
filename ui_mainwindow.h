@@ -18,6 +18,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -114,6 +115,8 @@ public:
     QHBoxLayout *horizontalLayout;
     QCustomPlot *errorPlot;
     QCustomPlot *pidPlot;
+    QLineEdit *statusEdit;
+    QLabel *label_13;
     QMenuBar *menubar;
     QMenu *menuFILE;
     QMenu *menuARX;
@@ -473,6 +476,18 @@ public:
 
         formLayout_5->setLayout(0, QFormLayout::FieldRole, verticalLayout_2);
 
+        statusEdit = new QLineEdit(centralwidget);
+        statusEdit->setObjectName("statusEdit");
+
+        formLayout_5->setWidget(1, QFormLayout::FieldRole, statusEdit);
+
+        label_13 = new QLabel(centralwidget);
+        label_13->setObjectName("label_13");
+        label_13->setMinimumSize(QSize(200, 28));
+        label_13->setAlignment(Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter);
+
+        formLayout_5->setWidget(1, QFormLayout::LabelRole, label_13);
+
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -537,6 +552,7 @@ public:
         label_9->setText(QCoreApplication::translate("MainWindow", "DUTY CYCLE", nullptr));
         squareRadioButton_3->setText(QCoreApplication::translate("MainWindow", "SQUARE", nullptr));
         label_14->setText(QCoreApplication::translate("MainWindow", "CONSTANT", nullptr));
+        label_13->setText(QCoreApplication::translate("MainWindow", "Network status: ", nullptr));
         menuFILE->setTitle(QCoreApplication::translate("MainWindow", "FILE", nullptr));
         menuARX->setTitle(QCoreApplication::translate("MainWindow", "ARX", nullptr));
         menuNetwork->setTitle(QCoreApplication::translate("MainWindow", "Network", nullptr));

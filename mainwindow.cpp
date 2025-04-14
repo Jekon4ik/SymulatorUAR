@@ -367,6 +367,7 @@ void MainWindow::on_actionConnect_triggered()
     if(dialogNetwork->exec() == QDialog::Accepted)
     {
         networkHandler = new Network();
+        networkHandler->setStatus(ui->statusEdit);
         if(dialogNetwork->getNetworkMode() == NetworkMode::Server)
         {
             networkHandler->startAsServer(dialogNetwork->getPort());
