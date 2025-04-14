@@ -43,7 +43,7 @@ public:
     QAction *actionLOCALHOST;
     QAction *actionLOCALHOST_2;
     QAction *actionLOCALHOST_3;
-    QAction *actionLocalhost;
+    QAction *actionConnect;
     QAction *actionLAN;
     QAction *actionDirect_Network;
     QAction *actionDisconnect;
@@ -141,8 +141,8 @@ public:
         actionLOCALHOST_2->setObjectName("actionLOCALHOST_2");
         actionLOCALHOST_3 = new QAction(MainWindow);
         actionLOCALHOST_3->setObjectName("actionLOCALHOST_3");
-        actionLocalhost = new QAction(MainWindow);
-        actionLocalhost->setObjectName("actionLocalhost");
+        actionConnect = new QAction(MainWindow);
+        actionConnect->setObjectName("actionConnect");
         actionLAN = new QAction(MainWindow);
         actionLAN->setObjectName("actionLAN");
         actionDirect_Network = new QAction(MainWindow);
@@ -494,9 +494,7 @@ public:
         menuFILE->addAction(actionSAVE_TO_FILE);
         menuFILE->addAction(actionLOAD_FROM_FILE);
         menuARX->addAction(actionSET);
-        menuNetwork->addAction(actionLocalhost);
-        menuNetwork->addAction(actionLAN);
-        menuNetwork->addAction(actionDirect_Network);
+        menuNetwork->addAction(actionConnect);
         menuNetwork->addAction(actionDisconnect);
 
         retranslateUi(MainWindow);
@@ -514,7 +512,7 @@ public:
         actionLOCALHOST->setText(QCoreApplication::translate("MainWindow", "LOCALHOST", nullptr));
         actionLOCALHOST_2->setText(QCoreApplication::translate("MainWindow", "LOCALHOST", nullptr));
         actionLOCALHOST_3->setText(QCoreApplication::translate("MainWindow", "LOCALHOST", nullptr));
-        actionLocalhost->setText(QCoreApplication::translate("MainWindow", "Localhost", nullptr));
+        actionConnect->setText(QCoreApplication::translate("MainWindow", "Connect", nullptr));
         actionLAN->setText(QCoreApplication::translate("MainWindow", "LAN", nullptr));
         actionDirect_Network->setText(QCoreApplication::translate("MainWindow", "Direct Network", nullptr));
         actionDisconnect->setText(QCoreApplication::translate("MainWindow", "Disconnect", nullptr));

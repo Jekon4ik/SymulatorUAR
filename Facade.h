@@ -10,6 +10,7 @@
 #include "SimulatorMemento.h"
 #include "qobject.h"
 #include <vector>
+#include <QTimer>
 
 class Facade : public QObject
 {

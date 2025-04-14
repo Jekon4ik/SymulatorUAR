@@ -361,53 +361,29 @@ void MainWindow::on_actionLOAD_FROM_FILE_triggered()
     }
 }
 
-void MainWindow::on_actionLocalhost_triggered()
+void MainWindow::on_actionConnect_triggered()
 {
-    dialogLocalhost = new DialogLocalhost();
-    if(dialogLocalhost->exec() == QDialog::Accepted)
+    dialogNetwork = new DialogNetwork();
+    if(dialogNetwork->exec() == QDialog::Accepted)
     {
         networkHandler = new Network();
-        if(dialogLocalhost->getNetworkMode() == NetworkMode::Server)
+        if(dialogNetwork->getNetworkMode() == NetworkMode::Server)
         {
-            networkHandler->startAsServer(11111);
+            networkHandler->startAsServer(dialogNetwork->getPort());
         }
-        else if(dialogLocalhost->getNetworkMode() == NetworkMode::Client)
+        else if(dialogNetwork->getNetworkMode() == NetworkMode::Client)
         {
-            networkHandler->startAsClient("127.0.0.1", 11111);
+            networkHandler->startAsClient(dialogNetwork->getAddress(), dialogNetwork->getPort());
         }
+        ui->actionConnect->setVisible(0);
+        ui->actionDisconnect->setVisible(1);
     }
-    ui->actionLocalhost->setVisible(0);
-    ui->actionLAN->setVisible(0);
-    ui->actionDirect_Network->setVisible(0);
-    ui->actionDisconnect->setVisible(1);
 }
 
 void MainWindow::on_actionDisconnect_triggered()
 {
     networkHandler->disconnect();
-    ui->actionLocalhost->setVisible(1);
-    ui->actionLAN->setVisible(1);
-    ui->actionDirect_Network->setVisible(1);
+    ui->actionConnect->setVisible(1);
     ui->actionDisconnect->setVisible(0);
 }
 
-void MainWindow::on_action_Direct_Network_triggered()
-{
-    dialogDirect = new DialogDirectNetwork();
-    if(dialogDirect->exec() == QDialog::Accepted)
-    {
-        networkHandler = new Network();
-        if(dialogDirect->getNetworkMode() == NetworkMode::Server)
-        {
-            networkHandler->startAsServer(11111);
-        }
-        else if(dialogDirect->getNetworkMode() == NetworkMode::Client)
-        {
-            networkHandler->startAsClient(dialogDirect->getIpAddress(), 11111);
-        }
-    }
-    ui->actionLocalhost->setVisible(0);
-    ui->actionLAN->setVisible(0);
-    ui->actionDirect_Network->setVisible(0);
-    ui->actionDisconnect->setVisible(1);
-}

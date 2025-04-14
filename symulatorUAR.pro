@@ -16,9 +16,8 @@ SOURCES += \
     SetpointGenerator.cpp \
     Simualtor.cpp \
     SimulatorMemento.cpp \
+    dialogNetwork.cpp \
     dialogarx.cpp \
-    dialogdirectnetwork.cpp \
-    dialoglocalhost.cpp \
     main.cpp \
     mainwindow.cpp \
     network.cpp \
@@ -33,17 +32,15 @@ HEADERS += \
     SetpointGenerator.h \
     Simulator.h \
     SimulatorMemento.h \
+    dialogNetwork.h \
     dialogarx.h \
-    dialogdirectnetwork.h \
-    dialoglocalhost.h \
     mainwindow.h \
     network.h \
     qcustomplot.h
 
 FORMS += \
+    dialogNetwork.ui \
     dialogarx.ui \
-    dialogdirectnetwork.ui \
-    dialoglocalhost.ui \
     mainwindow.ui
 
 # Default rules for deployment.

@@ -9,8 +9,7 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include "network.h"
-#include "dialoglocalhost.h"
-#include "dialogdirectnetwork.h"
+#include "dialogNetwork.h"
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -56,11 +55,7 @@ private slots:
 
     void on_actionLOAD_FROM_FILE_triggered();
 
-    void on_actionLocalhost_triggered();
-
-    // void on_action_LAN_triggered();
-
-    void on_action_Direct_Network_triggered();
+    void on_actionConnect_triggered();
 
     void on_actionDisconnect_triggered();
 
@@ -74,7 +69,6 @@ private:
     int kField = 1;
     double noiseField = 0;
     Network *networkHandler = nullptr;
-    DialogLocalhost *dialogLocalhost = nullptr;
-    DialogDirectNetwork *dialogDirect = nullptr;
+    DialogNetwork *dialogNetwork = nullptr;
 };
 #endif // MAINWINDOW_H
