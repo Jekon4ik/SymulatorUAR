@@ -368,13 +368,38 @@ void MainWindow::on_actionConnect_triggered()
     {
         networkHandler = new Network();
         networkHandler->setStatus(ui->statusEdit);
-        if(dialogNetwork->getNetworkMode() == NetworkMode::Server)
+        if(dialogNetwork->getNetworkMode() == NetworkMode::Server) // MODEL ARX
         {
+            ui->networkModeLabel->setText("Server");
             networkHandler->startAsServer(dialogNetwork->getPort());
+            ui->kDoubleSpinBox->setEnabled(0);
+            ui->constCheckBox->setEnabled(0);
+            ui->tiDoubleSpinBox_2->setEnabled(0);
+            ui->tdDoubleSpinBox_3->setEnabled(0);
+            ui->manualRadioButton->setEnabled(0);
+            ui->constantDoubleSpinBox->setEnabled(0);
+            ui->horizontalSlider->setEnabled(0);
+            ui->activationTimeSpinBox->setEnabled(0);
+            ui->amplitudeSinusoidalDoubleSpinBox->setEnabled(0);
+            ui->sinusoidConstantdoubleSpinBox_2->setEnabled(0);
+            ui->periodSinusoidalDoubleSpinBox_2->setEnabled(0);
+            ui->sinusoidalRadioButton_2->setEnabled(0);
+            ui->squareRadioButton_3->setEnabled(0);
+            ui->squareConstantSpinBox_3->setEnabled(0);
+            ui->amplitudeSquareDoubleSpinBox_3->setEnabled(0);
+            ui->periodSquareDoubleSpinBox_4->setEnabled(0);
+            ui->dutyCycleSquareDoubleSpinBox_5->setEnabled(0);
+            ui->timeIntervalSpinBox->setEnabled(0);
+            ui->startButton->setEnabled(0);
+            ui->resetButton->setEnabled(0);
+            ui->actualizeButton->setEnabled(0);
+            ui->stopButton->setEnabled(0);
         }
-        else if(dialogNetwork->getNetworkMode() == NetworkMode::Client)
+        else if(dialogNetwork->getNetworkMode() == NetworkMode::Client) // REGULATOR
         {
+            ui->networkModeLabel->setText("Client");
             networkHandler->startAsClient(dialogNetwork->getAddress(), dialogNetwork->getPort());
+            ui->menuARX->setEnabled(0);
         }
         ui->actionConnect->setVisible(0);
         ui->actionDisconnect->setVisible(1);
@@ -383,8 +408,36 @@ void MainWindow::on_actionConnect_triggered()
 
 void MainWindow::on_actionDisconnect_triggered()
 {
+    ui->networkModeLabel->setText("Offline");
     networkHandler->disconnect();
     ui->actionConnect->setVisible(1);
     ui->actionDisconnect->setVisible(0);
+
+    ui->kDoubleSpinBox->setEnabled(1);
+    ui->constCheckBox->setEnabled(1);
+    ui->tiDoubleSpinBox_2->setEnabled(1);
+    ui->tdDoubleSpinBox_3->setEnabled(1);
+    ui->manualRadioButton->setEnabled(1);
+    ui->constantDoubleSpinBox->setEnabled(1);
+    ui->horizontalSlider->setEnabled(1);
+    ui->activationTimeSpinBox->setEnabled(1);
+    ui->amplitudeSinusoidalDoubleSpinBox->setEnabled(1);
+    ui->sinusoidConstantdoubleSpinBox_2->setEnabled(1);
+    ui->periodSinusoidalDoubleSpinBox_2->setEnabled(1);
+    ui->sinusoidalRadioButton_2->setEnabled(1);
+    ui->squareRadioButton_3->setEnabled(1);
+    ui->squareConstantSpinBox_3->setEnabled(1);
+    ui->amplitudeSquareDoubleSpinBox_3->setEnabled(1);
+    ui->periodSquareDoubleSpinBox_4->setEnabled(1);
+    ui->dutyCycleSquareDoubleSpinBox_5->setEnabled(1);
+    ui->timeIntervalSpinBox->setEnabled(1);
+    ui->startButton->setEnabled(1);
+    ui->resetButton->setEnabled(1);
+    ui->actualizeButton->setEnabled(1);
+    ui->stopButton->setEnabled(1);
+
+    ui->menuARX->setEnabled(1);
+
+
 }
 

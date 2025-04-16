@@ -115,8 +115,11 @@ public:
     QHBoxLayout *horizontalLayout;
     QCustomPlot *errorPlot;
     QCustomPlot *pidPlot;
-    QLineEdit *statusEdit;
+    QGridLayout *gridLayout_2;
     QLabel *label_13;
+    QLabel *label_15;
+    QLineEdit *statusEdit;
+    QLabel *networkModeLabel;
     QMenuBar *menubar;
     QMenu *menuFILE;
     QMenu *menuARX;
@@ -157,6 +160,7 @@ public:
         centralwidget->setObjectName("centralwidget");
         formLayout_5 = new QFormLayout(centralwidget);
         formLayout_5->setObjectName("formLayout_5");
+        formLayout_5->setContentsMargins(-1, 11, -1, -1);
         verticalLayout_3 = new QVBoxLayout();
         verticalLayout_3->setObjectName("verticalLayout_3");
         gridLayout = new QGridLayout();
@@ -476,17 +480,34 @@ public:
 
         formLayout_5->setLayout(0, QFormLayout::FieldRole, verticalLayout_2);
 
-        statusEdit = new QLineEdit(centralwidget);
-        statusEdit->setObjectName("statusEdit");
-
-        formLayout_5->setWidget(1, QFormLayout::FieldRole, statusEdit);
-
+        gridLayout_2 = new QGridLayout();
+        gridLayout_2->setObjectName("gridLayout_2");
         label_13 = new QLabel(centralwidget);
         label_13->setObjectName("label_13");
         label_13->setMinimumSize(QSize(200, 28));
+        label_13->setMaximumSize(QSize(120, 16777215));
         label_13->setAlignment(Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter);
 
-        formLayout_5->setWidget(1, QFormLayout::LabelRole, label_13);
+        gridLayout_2->addWidget(label_13, 1, 0, 1, 1);
+
+        label_15 = new QLabel(centralwidget);
+        label_15->setObjectName("label_15");
+        label_15->setAlignment(Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter);
+
+        gridLayout_2->addWidget(label_15, 0, 0, 1, 1);
+
+        statusEdit = new QLineEdit(centralwidget);
+        statusEdit->setObjectName("statusEdit");
+
+        gridLayout_2->addWidget(statusEdit, 1, 2, 1, 1);
+
+        networkModeLabel = new QLabel(centralwidget);
+        networkModeLabel->setObjectName("networkModeLabel");
+
+        gridLayout_2->addWidget(networkModeLabel, 0, 2, 1, 1);
+
+
+        formLayout_5->setLayout(6, QFormLayout::SpanningRole, gridLayout_2);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -553,6 +574,8 @@ public:
         squareRadioButton_3->setText(QCoreApplication::translate("MainWindow", "SQUARE", nullptr));
         label_14->setText(QCoreApplication::translate("MainWindow", "CONSTANT", nullptr));
         label_13->setText(QCoreApplication::translate("MainWindow", "Network status: ", nullptr));
+        label_15->setText(QCoreApplication::translate("MainWindow", "Aplication role: ", nullptr));
+        networkModeLabel->setText(QCoreApplication::translate("MainWindow", "Offline", nullptr));
         menuFILE->setTitle(QCoreApplication::translate("MainWindow", "FILE", nullptr));
         menuARX->setTitle(QCoreApplication::translate("MainWindow", "ARX", nullptr));
         menuNetwork->setTitle(QCoreApplication::translate("MainWindow", "Network", nullptr));

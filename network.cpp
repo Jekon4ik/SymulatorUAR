@@ -3,12 +3,19 @@
 Network::Network(QObject *parent)
     : QObject{parent}
 {
-    server = new QTcpServer();
-    connect(server,&QTcpServer::newConnection,this,&Network::onNewConnection);
+
 }
 
 void Network::startAsServer(int port)
 {
+    if(server)
+    {
+        server->close();
+        server->deleteLater();
+        server = nullptr;
+    }
+    server = new QTcpServer();
+    connect(server,&QTcpServer::newConnection,this,&Network::onNewConnection);
     if(server->listen(QHostAddress::Any, port))
     {
         updateStatus("[Server] Listening on port " + QString::number(port));
@@ -21,27 +28,19 @@ void Network::startAsServer(int port)
 
 void Network::startAsClient(QString host, int port)
 {
+    this->host = host;
+    this->port = port;
     if(socket)
     {
+        socket->disconnectFromHost();
         socket->deleteLater();
+        socket = nullptr;
     }
     socket = new QTcpSocket(this);
     connect(socket, &QTcpSocket::connected, this, &Network::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &Network::onDisconnected);
-    if(!reconnect)
-    {
-        reconnect = new QTimer();
-        reconnect->setInterval(1000);
-        connect(reconnect, &QTimer::timeout, this, [this, host, port]() {
-            if (socket && socket->state() == QAbstractSocket::UnconnectedState) {
-                updateStatus("[Client] Connecting to" + host + " " + QString::number(port));
-                socket->connectToHost(host, port);
-            }
-        });
-    }
-    reconnect->start();
     socket->connectToHost(host, port);
-    updateStatus("[Client] Connecting to" + host + " " + QString::number(port));
+    updateStatus("[Client] Connecting to" + host + ":" + QString::number(port));
 }
 
 void Network::onNewConnection()
@@ -63,13 +62,13 @@ void Network::disconnect()
     if(socket)
     {
         socket->disconnectFromHost();
-        socket->deleteLater();
-        socket = nullptr;
     }
     if(server && server->isListening())
     {
         server->close();
         updateStatus("[Server] Server Stopped");
+        server->deleteLater();
+        server = nullptr;
     }
 }
 
@@ -89,18 +88,21 @@ void Network::updateStatus(const QString &message)
 void Network::onConnected()
 {
     updateStatus("[Client] Connected successfully!");
-    if (reconnect)
-    {
-        reconnect->stop();
-    }
 }
 
 void Network::onDisconnected()
 {
-    updateStatus("[Network] Client disconnected");
-    if (reconnect)
+    if (!(server && server->isListening()))
     {
-        reconnect->stop();
+        updateStatus("[Client] Disconnected from server.");
+    }
+    else
+    {
+        updateStatus("[Server] Client disconnected. Waiting for new connection.");
+    }
+    if (socket)
+    {
+        socket->deleteLater();
+        socket = nullptr;
     }
 }
-

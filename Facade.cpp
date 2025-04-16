@@ -237,6 +237,7 @@ void Facade::loadFromFile(QString filename)
     this->actualArxB = this->simulator->getArxBSettings();
     this->actualArxK = this->simulator->getArxKSettings();
 }
+
 std::vector<std::tuple<double, double, double, double>> Facade::getHistory()
 {
     return this->simulator->getHistory();

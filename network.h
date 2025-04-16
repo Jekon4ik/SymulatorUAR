@@ -25,8 +25,8 @@ private:
     QTcpSocket *socket = nullptr;
     QTcpServer *server = nullptr;
     QLineEdit* status = nullptr;
-    QTimer* reconnect = nullptr;
-
+    QString host;
+    int port;
     void updateStatus(const QString &message);
 signals:
 };

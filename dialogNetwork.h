@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "NetworkMode.h"
+#include <QMessageBox>
 
 namespace Ui {
 class DialogNetwork;

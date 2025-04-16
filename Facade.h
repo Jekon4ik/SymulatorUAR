@@ -3,11 +3,7 @@
 #pragma once
 
 #include <QVector>
-#include "ARX.h"
-#include "Feedback.h"
-#include "SetpointGenerator.h"
 #include "Simulator.h"
-#include "SimulatorMemento.h"
 #include "qobject.h"
 #include <vector>
 #include <QTimer>
