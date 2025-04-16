@@ -25,6 +25,7 @@ void DialogNetwork::on_serverRadio_clicked()
     ui->clientRadio->setChecked(0);
     ui->addressEdit->setEnabled(0);
     ui->addressEdit->clear();
+    ui->addressEdit->setText("127.0.0.1");
 }
 
 

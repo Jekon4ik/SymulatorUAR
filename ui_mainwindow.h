@@ -498,6 +498,7 @@ public:
 
         statusEdit = new QLineEdit(centralwidget);
         statusEdit->setObjectName("statusEdit");
+        statusEdit->setReadOnly(true);
 
         gridLayout_2->addWidget(statusEdit, 1, 2, 1, 1);
 
