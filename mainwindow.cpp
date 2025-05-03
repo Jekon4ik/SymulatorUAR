@@ -370,7 +370,7 @@ void MainWindow::on_actionConnect_triggered()
         networkHandler->setStatus(ui->statusEdit);
         if(dialogNetwork->getNetworkMode() == NetworkMode::Server) // MODEL ARX
         {
-            ui->networkModeLabel->setText("Server");
+            ui->networkModeLabel->setText("Server - Model ARX");
             networkHandler->startAsServer(dialogNetwork->getPort());
             ui->kDoubleSpinBox->setEnabled(0);
             ui->constCheckBox->setEnabled(0);
@@ -397,7 +397,7 @@ void MainWindow::on_actionConnect_triggered()
         }
         else if(dialogNetwork->getNetworkMode() == NetworkMode::Client) // REGULATOR
         {
-            ui->networkModeLabel->setText("Client");
+            ui->networkModeLabel->setText("Client - Regulator");
             networkHandler->startAsClient(dialogNetwork->getAddress(), dialogNetwork->getPort());
             ui->menuARX->setEnabled(0);
         }
