@@ -126,7 +126,6 @@ void MainWindow::updatePlots(
     if (error > errorMax) {
         errorMax += 12;
     }
-
     ui->errorPlot->yAxis->setRange(errorMin, errorMax);
     ui->errorPlot->replot();
 
@@ -392,14 +391,24 @@ void MainWindow::on_actionConnect_triggered()
             ui->timeIntervalSpinBox->setEnabled(0);
             ui->startButton->setEnabled(0);
             ui->resetButton->setEnabled(0);
-            ui->actualizeButton->setEnabled(0);
             ui->stopButton->setEnabled(0);
+            facade->setNetworkMode(NetworkMode::Server);
+            facade->simulation = true;
+            connect(networkHandler, &Network::controlValueReceived,
+                    facade, &Facade::onNetworkControl);//działa
+            connect(facade, &Facade::sendMeasuredValue,
+                    networkHandler, &Network::sendMeasuredValue);
         }
         else if(dialogNetwork->getNetworkMode() == NetworkMode::Client) // REGULATOR
         {
             ui->networkModeLabel->setText("Client - Regulator");
             networkHandler->startAsClient(dialogNetwork->getAddress(), dialogNetwork->getPort());
             ui->menuARX->setEnabled(0);
+            facade->setNetworkMode(NetworkMode::Client);
+            connect(networkHandler, &Network::measuredValueReceived,
+                    facade, &Facade::onNetworkMeasured);
+            connect(facade, &Facade::sendControlledValue,
+                    networkHandler, &Network::sendControlledValue);//działa
         }
         ui->actionConnect->setVisible(0);
         ui->actionDisconnect->setVisible(1);
@@ -433,11 +442,11 @@ void MainWindow::on_actionDisconnect_triggered()
     ui->timeIntervalSpinBox->setEnabled(1);
     ui->startButton->setEnabled(1);
     ui->resetButton->setEnabled(1);
-    ui->actualizeButton->setEnabled(1);
     ui->stopButton->setEnabled(1);
 
     ui->menuARX->setEnabled(1);
 
+    facade->setNetworkMode(NetworkMode::Offline);
 
 }
 

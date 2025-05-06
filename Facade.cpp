@@ -185,13 +185,71 @@ void Facade::stopSimulation()
 void Facade::runSimulationStep()
 {
     if (simulation) {
-        this->simulator->runSimulation();
-        vector<double> values = this->simulator->getState();
-        emit newSimulationData(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]);
-        qDebug() << "from facade. Time:" << values[0] << " Generated Value:" << values[1] << " Error:" << values[2]
-                 << "ControlValue(PID)" <<values[3] << " Adjusted Value(ARX):" << values[4]
-                 << "P:" << values[5] << "I:" << values[6] << "D:" << values[7];
+        qDebug() << (int)netMode;
+        switch (netMode) {
+        case NetworkMode::Offline: {
+            this->simulator->runSimulation();
+            vector<double> values = this->simulator->getState();
+            emit newSimulationData(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]);
+            qDebug() << "from facade. Time:" << values[0] << " Generated Value:" << values[1] << " Error:" << values[2]
+                     << "ControlValue(PID)" <<values[3] << " Adjusted Value(ARX):" << values[4]
+                     << "P:" << values[5] << "I:" << values[6] << "D:" << values[7];
+        }
+
+        case NetworkMode::Client: {
+            // 1) wykonaj krok lokalny (generator + PID + ARX)
+            simulator->runSimulation();
+            auto v = simulator->getState();
+            double time           = v[0];
+            double gen            = v[1];
+            double err            = v[2];
+            double u              = v[3];
+            double localY         = v[4];
+            double pPart          = v[5];
+            double iPart          = v[6];
+            double dPart          = v[7];
+
+            // 2) wyślij wartość sterującą do serwera (Object)
+            emit sendControlledValue(u);
+
+            // 3) odbierz y lub użyj lokalnej, gdy brak odpowiedzi
+            double y;
+            if (haveNewNetValue) {
+                y               = lastNetValue;
+                haveNewNetValue = false;
+            } else {
+                y = localY;  // timeout / brak pakietu
+            }
+
+            // 4) nadpisz pomiar w symulatorze
+            simulator->getFeedback()->setMeasuredValue(y);
+            // 5) wyemituj na wykresy
+            emit newSimulationData(time, gen, err, u, y, pPart, iPart, dPart);
+            break;
+        }
+
+        case NetworkMode::Server: {
+            // 1) oczekuj na u od klienta
+            qDebug() << "[Facade Server] runSimulationStep server branch, haveNewNetValue="
+                     << haveNewNetValue;
+            if (!haveNewNetValue) return;
+            double u = lastNetValue;
+            haveNewNetValue = false;
+
+            // 2) symuluj tylko obiekt ARX
+            double y = simulator->getARX()->getAdjustedValue(u);
+
+            // 3) odeślij y do klienta (Regulator)
+            emit sendMeasuredValue(y);
+
+            // 4) dla konsystencji – pobierz aktualny czas z symulatora,
+            //    ale nie licz generatora ani PID
+            auto v = simulator->getState();
+            emit newSimulationData(v[0], 0.0, 0.0, u, y, 0.0, 0.0, 0.0);
+            break;
+        }
     }
+}
 }
 void Facade::resetSimulation()
 {
@@ -259,4 +317,25 @@ std::vector<double> Facade::getActualArxA(){
 }
 std::vector<double> Facade::getActualArxB(){
     return this->actualArxB;
+}
+
+void Facade::setNetworkMode(NetworkMode m) {
+    netMode = m;
+    haveNewNetValue = true;
+}
+
+void Facade::onNetworkControl(double u) {
+    qDebug() << "[Facade Server] controlValueReceived:" << u;
+    if (netMode != NetworkMode::Server) return;
+
+    lastNetValue = u;
+    haveNewNetValue = true;
+
+    runSimulationStep();
+}
+
+void Facade::onNetworkMeasured(double y) {
+    qDebug() << "[Facade] onNetworkMeasured:" << y;
+    lastNetValue = y;
+    haveNewNetValue = true;
 }

@@ -3,9 +3,9 @@
 
 enum class NetworkMode
 {
-    None,
-    Server,
-    Client
+    Offline,
+    Client,
+    Server
 };
 
 #endif // NETWORKMODE_H

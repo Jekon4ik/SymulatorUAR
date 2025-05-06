@@ -31,7 +31,7 @@ private slots:
 
 private:
     Ui::DialogNetwork *ui;
-    NetworkMode mode = NetworkMode::None;
+    NetworkMode mode = NetworkMode::Offline;
 };
 
 #endif // DIALOGNETWORK_H

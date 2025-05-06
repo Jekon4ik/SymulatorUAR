@@ -39,6 +39,7 @@ void Network::startAsClient(QString host, int port)
     socket = new QTcpSocket(this);
     connect(socket, &QTcpSocket::connected, this, &Network::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &Network::onDisconnected);
+    connect(socket,&QTcpSocket::readyRead,this,&Network::onDataReady);
     socket->connectToHost(host, port);
     updateStatus("[Client] Connecting to" + host + ":" + QString::number(port));
 }
@@ -49,6 +50,7 @@ void Network::onNewConnection()
     if(socket)
     {
         connect(socket, &QTcpSocket::disconnected, this, &Network::onDisconnected);
+        connect(socket,&QTcpSocket::readyRead,this,&Network::onDataReady);
         updateStatus("[Server] Client connected!");
     }
     else
@@ -104,5 +106,54 @@ void Network::onDisconnected()
     {
         socket->deleteLater();
         socket = nullptr;
+    }
+}
+
+void Network::sendControlledValue(double value)
+{
+    qDebug() << "Send controlled value";
+    if (socket && socket->state() == QAbstractSocket::ConnectedState) {
+        QJsonObject pkt{{"controlValue", value}};
+        QByteArray out = QJsonDocument(pkt).toJson(QJsonDocument::Compact) + '\n';
+        socket->write(out);
+        socket->flush();
+        updateStatus("Control sent: " + QString::number(value));
+    }
+}
+
+void Network::onDataReady()
+{
+    while (socket && socket->canReadLine()) {
+        QByteArray line = socket->readLine().trimmed();
+        qDebug() << "[Network] Received raw:" << line;
+        QJsonParseError err;
+        QJsonDocument doc = QJsonDocument::fromJson(line, &err);
+        if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+            updateStatus("JSON parse error: " + err.errorString());
+            continue;
+        }
+        QJsonObject obj = doc.object();
+        if (obj.contains("controlValue")) {
+            double u = obj["controlValue"].toDouble();
+            updateStatus("Control rec: " + QString::number(u));
+            emit controlValueReceived(u);
+        }
+        else if (obj.contains("measuredValue")) {
+            double y = obj["measuredValue"].toDouble();
+            updateStatus("Measured rec: " + QString::number(y));
+            emit measuredValueReceived(y);
+        }
+    }
+}
+
+void Network::sendMeasuredValue(double value)
+{
+    qDebug() << "Send measured value";
+    if (socket && socket->state() == QAbstractSocket::ConnectedState) {
+        QJsonObject pkt{{"measuredValue", value}};
+        QByteArray out = QJsonDocument(pkt).toJson(QJsonDocument::Compact) + '\n';
+        socket->write(out);
+        socket->flush();
+        updateStatus("Measured sent: " + QString::number(value));
     }
 }

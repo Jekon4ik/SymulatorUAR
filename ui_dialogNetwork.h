@@ -90,9 +90,9 @@ public:
     {
         DialogNetwork->setWindowTitle(QCoreApplication::translate("DialogNetwork", "Dialog", nullptr));
         label_2->setText(QCoreApplication::translate("DialogNetwork", "Port", nullptr));
-        serverRadio->setText(QCoreApplication::translate("DialogNetwork", "Server", nullptr));
+        serverRadio->setText(QCoreApplication::translate("DialogNetwork", "[Server] ModelARX", nullptr));
         label->setText(QCoreApplication::translate("DialogNetwork", "Server IP Address", nullptr));
-        clientRadio->setText(QCoreApplication::translate("DialogNetwork", "Client", nullptr));
+        clientRadio->setText(QCoreApplication::translate("DialogNetwork", "[Client] Regulator", nullptr));
         pushButton->setText(QCoreApplication::translate("DialogNetwork", "Confim", nullptr));
         cancelButton->setText(QCoreApplication::translate("DialogNetwork", "Cancel", nullptr));
     } // retranslateUi

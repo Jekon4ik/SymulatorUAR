@@ -7,6 +7,7 @@
 #include "qobject.h"
 #include <vector>
 #include <QTimer>
+#include "NetworkMode.h"
 
 class Facade : public QObject
 {
@@ -35,8 +36,9 @@ private:
     double actualSquarelPeriod;
     double actualSquarelDutyCycle;
 
-    bool simulation = false;
-
+    NetworkMode netMode = NetworkMode::Offline;
+    double lastNetValue = 0.0;
+    bool haveNewNetValue = false;
 public:
     Facade();
     void initializeSimulator();
@@ -49,6 +51,8 @@ public:
     void setSinusoidalSignal(double amplitude, double period, double constant);
     void setSquareSignal(double amplitude, double period, double dutyCycle, double constant);
     void setTimeInterval(int interval);
+
+    bool simulation = false;
 
     void resetSimulation();
     void actualize();
@@ -79,7 +83,12 @@ public:
     std::vector<double> getActualArxB();
     int getActualArxK();
     std::vector<std::tuple<double, double, double, double>> getHistory();
+
+    void setNetworkMode(NetworkMode mode);
 private slots:
+public slots:
+    void onNetworkControl(double value);
+    void onNetworkMeasured(double value);
     void runSimulationStep();
 signals:
     void newSimulationData(double time,
@@ -90,6 +99,8 @@ signals:
                            double proportionalPIDPart,
                            double integralPIDPart,
                            double derivativePIDPart);
+    void sendControlledValue(double value);
+    void sendMeasuredValue(double value);
 };
 
 #endif // FACADE_H

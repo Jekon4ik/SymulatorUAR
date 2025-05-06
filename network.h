@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QLineEdit>
 #include <QTimer>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 class Network : public QObject
 {
@@ -21,6 +23,13 @@ private slots:
     void onNewConnection();
     void onConnected();
     void onDisconnected();
+    void onDataReady();
+public slots:
+    void sendControlledValue(double value);
+    void sendMeasuredValue(double value);
+signals:
+    void controlValueReceived(double value);
+    void measuredValueReceived(double value);
 private:
     QTcpSocket *socket = nullptr;
     QTcpServer *server = nullptr;
