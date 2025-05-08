@@ -1,14 +1,13 @@
 #ifndef FACADE_H
 #define FACADE_H
 #pragma once
-
+#include <qlabel.h>
 #include <QVector>
 #include "Simulator.h"
 #include "qobject.h"
 #include <vector>
 #include <QTimer>
 #include "NetworkMode.h"
-
 class Facade : public QObject
 {
     Q_OBJECT
@@ -39,10 +38,11 @@ private:
     NetworkMode netMode = NetworkMode::Offline;
     double lastNetValue = 0.0;
     bool haveNewNetValue = false;
+    QLabel* label=nullptr;
 public:
     Facade();
     void initializeSimulator();
-
+    void setStatus(QLabel* label);
     void setARX(vector<double> a, vector<double> b, int k, double noise);
     void setARXSettings(vector<double> a, vector<double> b, int k, double noise);
     void setPID(double k, double Ti, double Td);

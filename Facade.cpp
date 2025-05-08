@@ -1,5 +1,6 @@
 #include "Facade.h"
 #include "qtimer.h"
+#include "mainwindow.h"
 Facade::Facade()
 {
     this->simulator = new Simulator();
@@ -9,7 +10,9 @@ Facade::Facade()
     this->simulator->setPID(new PID(0.5, 10, 0.2));
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Facade::runSimulationStep);
+
 }
+
 bool areVectorsEqual(const std::vector<double>& v1, const std::vector<double>& v2, double epsilon = 1e-9) {
     if (v1.size() != v2.size()) {
         return false;
@@ -181,13 +184,19 @@ void Facade::stopSimulation()
     this->simulator->stopSimulation();
     qDebug() << "Simulation stopped!";
 }
+void Facade::setStatus(QLabel* label)
+{
+    this->label=label;
 
+}
 void Facade::runSimulationStep()
 {
+
     if (simulation) {
         qDebug() << (int)netMode;
         switch (netMode) {
         case NetworkMode::Offline: {
+            label->setStyleSheet("");
             this->simulator->runSimulation();
             vector<double> values = this->simulator->getState();
             emit newSimulationData(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]);
@@ -213,11 +222,14 @@ void Facade::runSimulationStep()
             emit sendControlledValue(u);
 
             // 3) odbierz y lub użyj lokalnej, gdy brak odpowiedzi
+
             double y;
             if (haveNewNetValue) {
+                label->setStyleSheet("background-color: green; border-radius: 10px;");
                 y               = lastNetValue;
                 haveNewNetValue = false;
             } else {
+                label->setStyleSheet("background-color: red; border-radius: 10px;");
                 y = localY;  // timeout / brak pakietu
             }
 
@@ -232,7 +244,12 @@ void Facade::runSimulationStep()
             // 1) oczekuj na u od klienta
             qDebug() << "[Facade Server] runSimulationStep server branch, haveNewNetValue="
                      << haveNewNetValue;
-            if (!haveNewNetValue) return;
+            if (!haveNewNetValue)
+            {
+                label->setStyleSheet("background-color: red; border-radius: 10px;");
+                return;
+            }
+             label->setStyleSheet("background-color: green; border-radius: 10px;");
             double u = lastNetValue;
             haveNewNetValue = false;
 

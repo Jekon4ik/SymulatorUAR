@@ -60,6 +60,7 @@ private slots:
     void on_actionDisconnect_triggered();
 
 
+
 private:
     Ui::MainWindow *ui;
     Facade *facade;
@@ -70,5 +71,6 @@ private:
     double noiseField = 0;
     Network *networkHandler = nullptr;
     DialogNetwork *dialogNetwork = nullptr;
+
 };
 #endif // MAINWINDOW_H

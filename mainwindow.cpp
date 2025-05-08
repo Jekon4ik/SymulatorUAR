@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    ,  ui(new Ui::MainWindow)
 {
     facade = new Facade();
     ui->setupUi(this);
@@ -84,6 +84,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pidPlot->graph(2)->setName("I"); //blue Ti
     ui->pidPlot->graph(3)->setName("D"); //green Td
     connect(facade, &Facade::newSimulationData, this, &MainWindow::updatePlots);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -162,6 +164,7 @@ void MainWindow::on_constantDoubleSpinBox_valueChanged(double arg1)
 
 void MainWindow::on_actionSET_triggered()
 {
+
     std::vector<double> A;
     std::vector<double> B;
     int k;
@@ -374,6 +377,7 @@ void MainWindow::on_actionConnect_triggered()
             ui->kDoubleSpinBox->setEnabled(0);
             ui->constCheckBox->setEnabled(0);
             ui->tiDoubleSpinBox_2->setEnabled(0);
+            ui->actualizeButton->setEnabled(0);
             ui->tdDoubleSpinBox_3->setEnabled(0);
             ui->manualRadioButton->setEnabled(0);
             ui->constantDoubleSpinBox->setEnabled(0);
@@ -398,6 +402,7 @@ void MainWindow::on_actionConnect_triggered()
                     facade, &Facade::onNetworkControl);//działa
             connect(facade, &Facade::sendMeasuredValue,
                     networkHandler, &Network::sendMeasuredValue);
+            facade->setStatus(ui->label_13);
         }
         else if(dialogNetwork->getNetworkMode() == NetworkMode::Client) // REGULATOR
         {
@@ -409,6 +414,7 @@ void MainWindow::on_actionConnect_triggered()
                     facade, &Facade::onNetworkMeasured);
             connect(facade, &Facade::sendControlledValue,
                     networkHandler, &Network::sendControlledValue);//działa
+            facade->setStatus(ui->label_13);
         }
         ui->actionConnect->setVisible(0);
         ui->actionDisconnect->setVisible(1);
@@ -421,7 +427,7 @@ void MainWindow::on_actionDisconnect_triggered()
     networkHandler->disconnect();
     ui->actionConnect->setVisible(1);
     ui->actionDisconnect->setVisible(0);
-
+    ui->label_13->setStyleSheet(styleSheet());
     ui->kDoubleSpinBox->setEnabled(1);
     ui->constCheckBox->setEnabled(1);
     ui->tiDoubleSpinBox_2->setEnabled(1);
@@ -430,6 +436,7 @@ void MainWindow::on_actionDisconnect_triggered()
     ui->constantDoubleSpinBox->setEnabled(1);
     ui->horizontalSlider->setEnabled(1);
     ui->activationTimeSpinBox->setEnabled(1);
+    ui->actualizeButton->setEnabled(1);
     ui->amplitudeSinusoidalDoubleSpinBox->setEnabled(1);
     ui->sinusoidConstantdoubleSpinBox_2->setEnabled(1);
     ui->periodSinusoidalDoubleSpinBox_2->setEnabled(1);
