@@ -204,7 +204,6 @@ void Facade::runSimulationStep()
             break;
         }
         case NetworkMode::Client: {
-            // 1) wykonaj krok lokalny (generator + PID + ARX)
             qDebug() << "CLIENT MODE";
             simulator->runSimulation();
             auto v = simulator->getState();
@@ -217,10 +216,7 @@ void Facade::runSimulationStep()
             double iPart          = v[6];
             double dPart          = v[7];
 
-            // 2) wyślij wartość sterującą do serwera (Object)
             emit sendControlledValue(u);
-
-            // 3) odbierz y lub użyj lokalnej, gdy brak odpowiedzi
 
             double y;
             if (haveNewNetValue) {
@@ -229,18 +225,16 @@ void Facade::runSimulationStep()
                 haveNewNetValue = false;
             } else {
                 label->setStyleSheet("background-color: red; border-radius: 10px;");
-                y = localY;  // timeout / brak pakietu
+                y = localY;
             }
 
-            // 4) nadpisz pomiar w symulatorze
             simulator->getFeedback()->setMeasuredValue(y);
-            // 5) wyemituj na wykresy
+
             emit newSimulationData(time, gen, err, u, y, pPart, iPart, dPart);
             break;
         }
 
         case NetworkMode::Server: {
-            // 1) oczekuj na u od klienta
             qDebug() << "SERVER MODE";
             if (!haveNewNetValue)
             {
@@ -251,10 +245,8 @@ void Facade::runSimulationStep()
             double u = lastNetValue;
             haveNewNetValue = false;
 
-            // 2) symuluj tylko obiekt ARX
             double y = simulator->getARX()->getAdjustedValue(u);
 
-            // 3) odeślij y do klienta (Regulator)
             emit sendMeasuredValue(y);
             break;
         }
