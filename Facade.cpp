@@ -191,21 +191,21 @@ void Facade::setStatus(QLabel* label)
 }
 void Facade::runSimulationStep()
 {
-
     if (simulation) {
-        qDebug() << (int)netMode;
         switch (netMode) {
         case NetworkMode::Offline: {
+            qDebug() << "OFFLINE MODE";
             this->simulator->runSimulation();
             vector<double> values = this->simulator->getState();
             emit newSimulationData(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]);
             qDebug() << "from facade. Time:" << values[0] << " Generated Value:" << values[1] << " Error:" << values[2]
                      << "ControlValue(PID)" <<values[3] << " Adjusted Value(ARX):" << values[4]
                      << "P:" << values[5] << "I:" << values[6] << "D:" << values[7];
+            break;
         }
-
         case NetworkMode::Client: {
             // 1) wykonaj krok lokalny (generator + PID + ARX)
+            qDebug() << "CLIENT MODE";
             simulator->runSimulation();
             auto v = simulator->getState();
             double time           = v[0];
@@ -241,8 +241,7 @@ void Facade::runSimulationStep()
 
         case NetworkMode::Server: {
             // 1) oczekuj na u od klienta
-            qDebug() << "[Facade Server] runSimulationStep server branch, haveNewNetValue="
-                     << haveNewNetValue;
+            qDebug() << "SERVER MODE";
             if (!haveNewNetValue)
             {
                 label->setStyleSheet("background-color: red; border-radius: 10px;");

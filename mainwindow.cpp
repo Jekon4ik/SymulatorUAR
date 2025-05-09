@@ -115,7 +115,6 @@ void MainWindow::updatePlots(
     }
     ui->mainPlot->yAxis->setRange(yMin, yMax);
     ui->mainPlot->replot();
-    //ui->mainPlot->update();
 
     //Update errorPlot
     ui->errorPlot->graph(0)->addData(time, error);

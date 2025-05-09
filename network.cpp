@@ -40,6 +40,7 @@ void Network::startAsClient(QString host, int port)
     connect(socket, &QTcpSocket::connected, this, &Network::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &Network::onDisconnected);
     connect(socket,&QTcpSocket::readyRead,this,&Network::onDataReady);
+    connect(socket, &QAbstractSocket::errorOccurred,this, &Network::onDisconnected);
     socket->connectToHost(host, port);
     updateStatus("[Client] Connecting to" + host + ":" + QString::number(port));
 }
@@ -51,6 +52,7 @@ void Network::onNewConnection()
     {
         connect(socket, &QTcpSocket::disconnected, this, &Network::onDisconnected);
         connect(socket,&QTcpSocket::readyRead,this,&Network::onDataReady);
+        connect(socket, &QAbstractSocket::errorOccurred,this, &Network::onDisconnected);
         updateStatus("[Server] Client connected!");
     }
     else
@@ -125,7 +127,6 @@ void Network::onDataReady()
 {
     while (socket && socket->canReadLine()) {
         QByteArray line = socket->readLine().trimmed();
-        qDebug() << "[Network] Received raw:" << line;
         QJsonParseError err;
         QJsonDocument doc = QJsonDocument::fromJson(line, &err);
         if (err.error != QJsonParseError::NoError || !doc.isObject()) {
@@ -135,12 +136,12 @@ void Network::onDataReady()
         QJsonObject obj = doc.object();
         if (obj.contains("controlValue")) {
             double u = obj["controlValue"].toDouble();
-            updateStatus("Control rec: " + QString::number(u));
+            updateStatus("Control received: " + QString::number(u));
             emit controlValueReceived(u);
         }
         else if (obj.contains("measuredValue")) {
             double y = obj["measuredValue"].toDouble();
-            updateStatus("Measured rec: " + QString::number(y));
+            updateStatus("Measured received: " + QString::number(y));
             emit measuredValueReceived(y);
         }
     }
