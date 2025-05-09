@@ -196,7 +196,6 @@ void Facade::runSimulationStep()
         qDebug() << (int)netMode;
         switch (netMode) {
         case NetworkMode::Offline: {
-            label->setStyleSheet("");
             this->simulator->runSimulation();
             vector<double> values = this->simulator->getState();
             emit newSimulationData(values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]);
@@ -258,11 +257,6 @@ void Facade::runSimulationStep()
 
             // 3) odeślij y do klienta (Regulator)
             emit sendMeasuredValue(y);
-
-            // 4) dla konsystencji – pobierz aktualny czas z symulatora,
-            //    ale nie licz generatora ani PID
-            auto v = simulator->getState();
-            emit newSimulationData(v[0], 0.0, 0.0, u, y, 0.0, 0.0, 0.0);
             break;
         }
     }
