@@ -216,7 +216,7 @@ void Facade::runSimulationStep()
             double iPart          = v[6];
             double dPart          = v[7];
 
-            emit sendControlledValue(u);
+            emit sendControlledValue(u, time, gen);
 
             double y;
             if (haveNewNetValue) {
@@ -243,11 +243,14 @@ void Facade::runSimulationStep()
             }
              label->setStyleSheet("background-color: green; border-radius: 10px;");
             double u = lastNetValue;
+            double time = lastNetTime;
+            double gen = lastNetGen;
             haveNewNetValue = false;
 
             double y = simulator->getARX()->getAdjustedValue(u);
 
             emit sendMeasuredValue(y);
+            emit newSimulationData(time, gen, 0.0, u, y, 0.0, 0.0, 0.0);
             break;
         }
     }
@@ -326,18 +329,19 @@ void Facade::setNetworkMode(NetworkMode m) {
     haveNewNetValue = true;
 }
 
-void Facade::onNetworkControl(double u) {
-    qDebug() << "[Facade Server] controlValueReceived:" << u;
+void Facade::onNetworkControl(double value, double time, double gen) {
+    qDebug() << "[Facade Server] controlValueReceived:" << value;
     if (netMode != NetworkMode::Server) return;
-
-    lastNetValue = u;
+    lastNetValue = value;
+    lastNetTime = time;
+    lastNetGen = gen;
     haveNewNetValue = true;
 
     runSimulationStep();
 }
 
 void Facade::onNetworkMeasured(double y) {
-    qDebug() << "[Facade] onNetworkMeasured:" << y;
+    qDebug() << "[Facade] measuredValueReceived:" << y;
     lastNetValue = y;
     haveNewNetValue = true;
 }

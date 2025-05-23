@@ -111,15 +111,18 @@ void Network::onDisconnected()
     }
 }
 
-void Network::sendControlledValue(double value)
+void Network::sendControlledValue(double value, double time, double gen)
 {
     qDebug() << "Send controlled value";
     if (socket && socket->state() == QAbstractSocket::ConnectedState) {
-        QJsonObject pkt{{"controlValue", value}};
+        QJsonObject pkt;
+        pkt["controlValue"] = value;
+        pkt["time"] = time;
+        pkt["setpoint"] = gen;
         QByteArray out = QJsonDocument(pkt).toJson(QJsonDocument::Compact) + '\n';
         socket->write(out);
         socket->flush();
-        updateStatus("Control sent: " + QString::number(value));
+        updateStatus("Control sent: " + QString::number(value) + "Time sent: " + QString::number(time) + "Setpoint sent: " + QString::number(gen));
     }
 }
 
@@ -136,8 +139,10 @@ void Network::onDataReady()
         QJsonObject obj = doc.object();
         if (obj.contains("controlValue")) {
             double u = obj["controlValue"].toDouble();
-            updateStatus("Control received: " + QString::number(u));
-            emit controlValueReceived(u);
+            double time = obj["time"].toDouble();
+            double gen = obj["setpoint"].toDouble();
+            updateStatus("Control received: " + QString::number(u) + "Time received: " + QString::number(time) + "Setpoint received: " + QString::number(gen));
+            emit controlValueReceived(u, time, gen);
         }
         else if (obj.contains("measuredValue")) {
             double y = obj["measuredValue"].toDouble();

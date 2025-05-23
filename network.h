@@ -25,10 +25,10 @@ private slots:
     void onDisconnected();
     void onDataReady();
 public slots:
-    void sendControlledValue(double value);
+    void sendControlledValue(double value, double time, double gen);
     void sendMeasuredValue(double value);
 signals:
-    void controlValueReceived(double value);
+    void controlValueReceived(double value, double time, double gen);
     void measuredValueReceived(double value);
 private:
     QTcpSocket *socket = nullptr;

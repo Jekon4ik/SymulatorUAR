@@ -84,8 +84,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pidPlot->graph(2)->setName("I"); //blue Ti
     ui->pidPlot->graph(3)->setName("D"); //green Td
     connect(facade, &Facade::newSimulationData, this, &MainWindow::updatePlots);
-
-
 }
 
 MainWindow::~MainWindow()

@@ -37,6 +37,8 @@ private:
 
     NetworkMode netMode = NetworkMode::Offline;
     double lastNetValue = 0.0;
+    double lastNetTime = 0.0;
+    double lastNetGen = 0.0;
     bool haveNewNetValue = false;
     QLabel* label=nullptr;
 public:
@@ -87,7 +89,7 @@ public:
     void setNetworkMode(NetworkMode mode);
 private slots:
 public slots:
-    void onNetworkControl(double value);
+    void onNetworkControl(double value, double time, double gen);
     void onNetworkMeasured(double value);
     void runSimulationStep();
 signals:
@@ -99,7 +101,7 @@ signals:
                            double proportionalPIDPart,
                            double integralPIDPart,
                            double derivativePIDPart);
-    void sendControlledValue(double value);
+    void sendControlledValue(double value, double time, double gen);
     void sendMeasuredValue(double value);
 };
 
