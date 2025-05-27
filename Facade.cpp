@@ -192,6 +192,7 @@ void Facade::setStatus(QLabel* label)
 }
 void Facade::runSimulationStep()
 {
+    qDebug() << simulation;
     if (simulation) {
         switch (netMode) {
         case NetworkMode::Offline: {

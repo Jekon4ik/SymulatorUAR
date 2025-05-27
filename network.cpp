@@ -111,6 +111,7 @@ void Network::onDisconnected()
     }
     emit disconnectedByPeer();
 }
+
 void Network::sendResetRequest()
 {
     if (socket && socket->state() == QAbstractSocket::ConnectedState) {
@@ -122,6 +123,7 @@ void Network::sendResetRequest()
         updateStatus("Reset request sent");
     }
 }
+
 void Network::sendControlledValue(double value, double time, double gen)
 {
     qDebug() << "Send controlled value";

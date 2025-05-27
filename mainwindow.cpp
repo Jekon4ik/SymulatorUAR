@@ -266,6 +266,10 @@ void MainWindow::on_resetButton_clicked()
     }
     facade->stopSimulation();
     facade->resetSimulation();
+    if(dialogNetwork->getNetworkMode() == NetworkMode::Server)
+    {
+        facade->simulation = true;
+    }
     ui->mainPlot->graph(0)->data()->clear();
     ui->mainPlot->graph(1)->data()->clear();
     ui->errorPlot->graph(0)->data()->clear();
@@ -439,6 +443,12 @@ void MainWindow::on_actionDisconnect_triggered()
         disconnect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
         unlockControls();
         facade->setNetworkMode(NetworkMode::Offline);
+        if(facade->getNetworkMode() == NetworkMode::Server)
+        {
+            on_resetButton_clicked();
+        }
+        on_actualizeButton_clicked();
+        facade->startSimulation();
     }
 }
 
@@ -522,10 +532,5 @@ void MainWindow::unlockControls()
     ui->pidPlot->legend->item(3)->setVisible(true); // D
 
     ui->pidPlot->replot();
-
-    facade->setNetworkMode(NetworkMode::Offline);
-    facade->startSimulation();
-
-
 }
 
