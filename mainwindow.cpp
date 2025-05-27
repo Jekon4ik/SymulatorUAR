@@ -440,13 +440,17 @@ void MainWindow::on_actionDisconnect_triggered()
         disconnect(facade, &Facade::sendMeasuredValue,
                 networkHandler, &Network::sendMeasuredValue);
         disconnect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
-        disconnect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
+        disconnect(networkHandler, &Network::resetReceived, this, &MainWindow::onResetReceived);
+
         unlockControls();
-        facade->setNetworkMode(NetworkMode::Offline);
         if(facade->getNetworkMode() == NetworkMode::Server)
         {
             on_resetButton_clicked();
+            facade->simulation=true;
         }
+        facade->setNetworkMode(NetworkMode::Offline);
+
+
         on_actualizeButton_clicked();
         facade->startSimulation();
     }
