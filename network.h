@@ -19,6 +19,7 @@ public:
     void startAsClient(QString host, int port);
     void disconnect();
     void setStatus(QLineEdit* lineEdit);
+    QTcpSocket *socket = nullptr;
 private slots:
     void onNewConnection();
     void onConnected();
@@ -32,7 +33,7 @@ signals:
     void measuredValueReceived(double value);
     void disconnectedByPeer();
 private:
-    QTcpSocket *socket = nullptr;
+
     QTcpServer *server = nullptr;
     QLineEdit* status = nullptr;
     QString host;

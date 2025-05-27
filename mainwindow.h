@@ -69,8 +69,10 @@ private:
     double noiseField = 0;
     Network *networkHandler = nullptr;
     DialogNetwork *dialogNetwork = nullptr;
+
     void blockARXControls();
     void blockRegulatorControls();
     void unlockControls();
+
 };
 #endif // MAINWINDOW_H

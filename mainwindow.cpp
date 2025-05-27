@@ -32,57 +32,60 @@ MainWindow::MainWindow(QWidget *parent)
     ui->mainPlot->graph(0)->setName("Setpoint value"); // Green graph
     ui->mainPlot->graph(1)->setName("Adjusted signal");       // Red graph
 
-    ui->errorPlot->addGraph();
-    ui->errorPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-    ui->errorPlot->graph()->setLineStyle(QCPGraph::lsLine);
-    ui->errorPlot->xAxis->setLabel("Time [s]");
-    ui->errorPlot->xAxis->setRange(0, 15);
-    ui->errorPlot->yAxis->setRange(-10, 10);
-    ui->errorPlot->graph(0)->setPen(QPen(Qt::blue));
-    ui->errorPlot->plotLayout()->insertRow(0);
-    ui->errorPlot->plotLayout()->addElement(0,
-                                            0,
-                                            new QCPTextElement(ui->errorPlot,
-                                                               "ERROR",
-                                                               QFont("sans", 12, QFont::Bold)));
+        ui->errorPlot->addGraph();
+        ui->errorPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+        ui->errorPlot->graph()->setLineStyle(QCPGraph::lsLine);
+        ui->errorPlot->xAxis->setLabel("Time [s]");
+        ui->errorPlot->xAxis->setRange(0, 15);
+        ui->errorPlot->yAxis->setRange(-10, 10);
+        ui->errorPlot->graph(0)->setPen(QPen(Qt::blue));
+        ui->errorPlot->plotLayout()->insertRow(0);
+        ui->errorPlot->plotLayout()->addElement(0,
+                                                0,
+                                                new QCPTextElement(ui->errorPlot,
+                                                                   "ERROR",
+                                                                   QFont("sans", 12, QFont::Bold)));
 
-    ui->pidPlot->addGraph();
-    ui->pidPlot->addGraph();
-    ui->pidPlot->addGraph();
-    ui->pidPlot->addGraph();
-    ui->pidPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-    ui->pidPlot->graph(1)->setScatterStyle(QCPScatterStyle::ssCircle);
-    ui->pidPlot->graph(2)->setScatterStyle(QCPScatterStyle::ssCircle);
-    ui->pidPlot->graph(3)->setScatterStyle(QCPScatterStyle::ssCircle);
 
-    ui->pidPlot->graph()->setLineStyle(QCPGraph::lsLine);
 
-    ui->pidPlot->xAxis->setLabel("Time [s]");
-    ui->pidPlot->xAxis->setRange(0, 15);
-    ui->pidPlot->yAxis->setRange(-10, 10);
+            ui->pidPlot->addGraph();
+            ui->pidPlot->addGraph();
+            ui->pidPlot->addGraph();
+            ui->pidPlot->addGraph();
+            ui->pidPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+            ui->pidPlot->graph(1)->setScatterStyle(QCPScatterStyle::ssCircle);
+            ui->pidPlot->graph(2)->setScatterStyle(QCPScatterStyle::ssCircle);
+            ui->pidPlot->graph(3)->setScatterStyle(QCPScatterStyle::ssCircle);
 
-    ui->pidPlot->graph(0)->setPen(QPen(Qt::red));
-    ui->pidPlot->graph(1)->setPen(QPen(Qt::yellow));
-    ui->pidPlot->graph(2)->setPen(QPen(Qt::blue));
-    ui->pidPlot->graph(3)->setPen(QPen(Qt::green));
+            ui->pidPlot->graph()->setLineStyle(QCPGraph::lsLine);
 
-    ui->pidPlot->plotLayout()->insertRow(0);
-    ui->pidPlot->plotLayout()->addElement(0,
-                                          0,
-                                          new QCPTextElement(ui->pidPlot,
-                                                             "PID",
-                                                             QFont("sans", 12, QFont::Bold)));
+            ui->pidPlot->xAxis->setLabel("Time [s]");
+            ui->pidPlot->xAxis->setRange(0, 15);
+            ui->pidPlot->yAxis->setRange(-10, 10);
 
-    //legend for PID graph
-    ui->pidPlot->legend->setVisible(true);
-    ui->pidPlot->legend->setFont(QFont("sans", 10));
-    ui->pidPlot->legend->setBrush(QBrush(QColor(255,255,255,150)));
-    ui->pidPlot->axisRect()->insetLayout()->setInsetAlignment(0,Qt::AlignTop | Qt::AlignLeft);
-    ui->pidPlot->legend->setMinimumSize(120,70);
-    ui->pidPlot->graph(0)->setName("Controll value");
-    ui->pidPlot->graph(1)->setName("P"); //yellow P
-    ui->pidPlot->graph(2)->setName("I"); //blue Ti
-    ui->pidPlot->graph(3)->setName("D"); //green Td
+            ui->pidPlot->graph(0)->setPen(QPen(Qt::red));
+            ui->pidPlot->graph(1)->setPen(QPen(Qt::yellow));
+            ui->pidPlot->graph(2)->setPen(QPen(Qt::blue));
+            ui->pidPlot->graph(3)->setPen(QPen(Qt::green));
+
+            ui->pidPlot->plotLayout()->insertRow(0);
+            ui->pidPlot->plotLayout()->addElement(0,
+                                                  0,
+                                                  new QCPTextElement(ui->pidPlot,
+                                                                     "PID",
+                                                                     QFont("sans", 12, QFont::Bold)));
+
+            //legend for PID graph
+            ui->pidPlot->legend->setVisible(true);
+            ui->pidPlot->legend->setFont(QFont("sans", 10));
+            ui->pidPlot->legend->setBrush(QBrush(QColor(255,255,255,150)));
+            ui->pidPlot->axisRect()->insetLayout()->setInsetAlignment(0,Qt::AlignTop | Qt::AlignLeft);
+            ui->pidPlot->legend->setMinimumSize(120,70);
+            ui->pidPlot->graph(0)->setName("Controll value");
+            ui->pidPlot->graph(1)->setName("P"); //yellow P
+            ui->pidPlot->graph(2)->setName("I"); //blue Ti
+            ui->pidPlot->graph(3)->setName("D"); //green Td
+
     connect(facade, &Facade::newSimulationData, this, &MainWindow::updatePlots);
 }
 
@@ -369,6 +372,7 @@ void MainWindow::on_actionConnect_triggered()
         networkHandler->setStatus(ui->statusEdit);
         if(dialogNetwork->getNetworkMode() == NetworkMode::Server) // MODEL ARX
         {
+
             ui->networkModeLabel->setText("Server - Model ARX");
             networkHandler->startAsServer(dialogNetwork->getPort());
             blockARXControls();
@@ -380,9 +384,20 @@ void MainWindow::on_actionConnect_triggered()
                     networkHandler, &Network::sendMeasuredValue);
             connect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
             facade->setStatus(ui->label_13);
+            ui->errorPlot->setVisible(false);
+            ui->pidPlot->graph(0)->setVisible(true);
+            ui->pidPlot->graph(1)->setVisible(false);
+            ui->pidPlot->graph(2)->setVisible(false);
+            ui->pidPlot->graph(3)->setVisible(false);
+            ui->pidPlot->legend->item(1)->setVisible(false); // P
+            ui->pidPlot->legend->item(2)->setVisible(false); // I
+            ui->pidPlot->legend->item(3)->setVisible(false); // D
+            ui->pidPlot->replot();
+
         }
         else if(dialogNetwork->getNetworkMode() == NetworkMode::Client) // REGULATOR
         {
+
             ui->networkModeLabel->setText("Client - Regulator");
             networkHandler->startAsClient(dialogNetwork->getAddress(), dialogNetwork->getPort());
             blockRegulatorControls();
@@ -401,6 +416,7 @@ void MainWindow::on_actionConnect_triggered()
 
 void MainWindow::on_actionDisconnect_triggered()
 {
+
     if(facade->getNetworkMode() != NetworkMode::Offline)
     {
         ui->networkModeLabel->setText("Offline");
@@ -450,6 +466,11 @@ void MainWindow::blockRegulatorControls()
 }
 void MainWindow::unlockControls()
 {
+
+
+    ui->networkModeLabel->setText("Offline");
+    networkHandler->disconnect();
+
     ui->actionConnect->setVisible(1);
     ui->actionDisconnect->setVisible(0);
     ui->label_13->setStyleSheet(styleSheet());
@@ -475,6 +496,25 @@ void MainWindow::unlockControls()
     ui->startButton->setEnabled(1);
     ui->resetButton->setEnabled(1);
     ui->stopButton->setEnabled(1);
+
     ui->menuARX->setEnabled(1);
+
+    ui->errorPlot->setVisible(true);
+    ui->menuARX->setEnabled(1);
+
+    ui->pidPlot->graph(0)->setVisible(true);
+    ui->pidPlot->graph(1)->setVisible(true);
+    ui->pidPlot->graph(2)->setVisible(true);
+    ui->pidPlot->graph(3)->setVisible(true);
+    ui->pidPlot->legend->item(1)->setVisible(true); // P
+    ui->pidPlot->legend->item(2)->setVisible(true); // I
+    ui->pidPlot->legend->item(3)->setVisible(true); // D
+
+    ui->pidPlot->replot();
+
+    facade->setNetworkMode(NetworkMode::Offline);
+    facade->startSimulation();
+
+
 }
 

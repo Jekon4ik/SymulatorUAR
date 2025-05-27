@@ -250,6 +250,7 @@ void Facade::runSimulationStep()
 
             double y = simulator->getARX()->getAdjustedValue(u);
 
+
             emit sendMeasuredValue(y);
             emit newSimulationData(time, gen, 0.0, u, y, 0.0, 0.0, 0.0);
             break;
