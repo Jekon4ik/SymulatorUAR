@@ -109,6 +109,7 @@ void Network::onDisconnected()
         socket->deleteLater();
         socket = nullptr;
     }
+    emit disconnectedByPeer();
 }
 
 void Network::sendControlledValue(double value, double time, double gen)

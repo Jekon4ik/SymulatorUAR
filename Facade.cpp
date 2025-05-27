@@ -6,6 +6,7 @@ Facade::Facade()
     this->simulator = new Simulator();
     this->simulator->setFeedback(new Feedback());
     this->simulator->setGenerator(new SetpointGenerator());
+    setConstantSignal(5.0,0.0);
     this->simulator->setARX(new Arx({-0.4}, {0.6}, 1,0));
     this->simulator->setPID(new PID(0.5, 10, 0.2));
     timer = new QTimer(this);
@@ -344,4 +345,9 @@ void Facade::onNetworkMeasured(double y) {
     qDebug() << "[Facade] measuredValueReceived:" << y;
     lastNetValue = y;
     haveNewNetValue = true;
+}
+
+NetworkMode Facade::getNetworkMode()
+{
+    return netMode;
 }

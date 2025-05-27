@@ -371,46 +371,27 @@ void MainWindow::on_actionConnect_triggered()
         {
             ui->networkModeLabel->setText("Server - Model ARX");
             networkHandler->startAsServer(dialogNetwork->getPort());
-            ui->kDoubleSpinBox->setEnabled(0);
-            ui->constCheckBox->setEnabled(0);
-            ui->tiDoubleSpinBox_2->setEnabled(0);
-            ui->actualizeButton->setEnabled(0);
-            ui->tdDoubleSpinBox_3->setEnabled(0);
-            ui->manualRadioButton->setEnabled(0);
-            ui->constantDoubleSpinBox->setEnabled(0);
-            ui->horizontalSlider->setEnabled(0);
-            ui->activationTimeSpinBox->setEnabled(0);
-            ui->amplitudeSinusoidalDoubleSpinBox->setEnabled(0);
-            ui->sinusoidConstantdoubleSpinBox_2->setEnabled(0);
-            ui->periodSinusoidalDoubleSpinBox_2->setEnabled(0);
-            ui->sinusoidalRadioButton_2->setEnabled(0);
-            ui->squareRadioButton_3->setEnabled(0);
-            ui->squareConstantSpinBox_3->setEnabled(0);
-            ui->amplitudeSquareDoubleSpinBox_3->setEnabled(0);
-            ui->periodSquareDoubleSpinBox_4->setEnabled(0);
-            ui->dutyCycleSquareDoubleSpinBox_5->setEnabled(0);
-            ui->timeIntervalSpinBox->setEnabled(0);
-            ui->startButton->setEnabled(0);
-            ui->resetButton->setEnabled(0);
-            ui->stopButton->setEnabled(0);
+            blockARXControls();
             facade->setNetworkMode(NetworkMode::Server);
             facade->simulation = true;
             connect(networkHandler, &Network::controlValueReceived,
-                    facade, &Facade::onNetworkControl);//działa
+                    facade, &Facade::onNetworkControl);
             connect(facade, &Facade::sendMeasuredValue,
                     networkHandler, &Network::sendMeasuredValue);
+            connect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
             facade->setStatus(ui->label_13);
         }
         else if(dialogNetwork->getNetworkMode() == NetworkMode::Client) // REGULATOR
         {
             ui->networkModeLabel->setText("Client - Regulator");
             networkHandler->startAsClient(dialogNetwork->getAddress(), dialogNetwork->getPort());
-            ui->menuARX->setEnabled(0);
+            blockRegulatorControls();
             facade->setNetworkMode(NetworkMode::Client);
             connect(networkHandler, &Network::measuredValueReceived,
                     facade, &Facade::onNetworkMeasured);
             connect(facade, &Facade::sendControlledValue,
-                    networkHandler, &Network::sendControlledValue);//działa
+                    networkHandler, &Network::sendControlledValue);
+            connect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
             facade->setStatus(ui->label_13);
         }
         ui->actionConnect->setVisible(0);
@@ -420,8 +401,55 @@ void MainWindow::on_actionConnect_triggered()
 
 void MainWindow::on_actionDisconnect_triggered()
 {
-    ui->networkModeLabel->setText("Offline");
-    networkHandler->disconnect();
+    if(facade->getNetworkMode() != NetworkMode::Offline)
+    {
+        ui->networkModeLabel->setText("Offline");
+        networkHandler->disconnect();
+        disconnect(networkHandler, &Network::measuredValueReceived,
+                facade, &Facade::onNetworkMeasured);
+        disconnect(facade, &Facade::sendControlledValue,
+                networkHandler, &Network::sendControlledValue);
+        disconnect(networkHandler, &Network::controlValueReceived,
+                facade, &Facade::onNetworkControl);
+        disconnect(facade, &Facade::sendMeasuredValue,
+                networkHandler, &Network::sendMeasuredValue);
+        disconnect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
+        unlockControls();
+        facade->setNetworkMode(NetworkMode::Offline);
+    }
+}
+
+void MainWindow::blockARXControls()
+{
+    ui->kDoubleSpinBox->setEnabled(0);
+    ui->constCheckBox->setEnabled(0);
+    ui->tiDoubleSpinBox_2->setEnabled(0);
+    ui->actualizeButton->setEnabled(0);
+    ui->tdDoubleSpinBox_3->setEnabled(0);
+    ui->manualRadioButton->setEnabled(0);
+    ui->constantDoubleSpinBox->setEnabled(0);
+    ui->horizontalSlider->setEnabled(0);
+    ui->activationTimeSpinBox->setEnabled(0);
+    ui->amplitudeSinusoidalDoubleSpinBox->setEnabled(0);
+    ui->sinusoidConstantdoubleSpinBox_2->setEnabled(0);
+    ui->periodSinusoidalDoubleSpinBox_2->setEnabled(0);
+    ui->sinusoidalRadioButton_2->setEnabled(0);
+    ui->squareRadioButton_3->setEnabled(0);
+    ui->squareConstantSpinBox_3->setEnabled(0);
+    ui->amplitudeSquareDoubleSpinBox_3->setEnabled(0);
+    ui->periodSquareDoubleSpinBox_4->setEnabled(0);
+    ui->dutyCycleSquareDoubleSpinBox_5->setEnabled(0);
+    ui->timeIntervalSpinBox->setEnabled(0);
+    ui->startButton->setEnabled(0);
+    ui->resetButton->setEnabled(0);
+    ui->stopButton->setEnabled(0);
+}
+void MainWindow::blockRegulatorControls()
+{
+    ui->menuARX->setEnabled(0);
+}
+void MainWindow::unlockControls()
+{
     ui->actionConnect->setVisible(1);
     ui->actionDisconnect->setVisible(0);
     ui->label_13->setStyleSheet(styleSheet());
@@ -447,10 +475,6 @@ void MainWindow::on_actionDisconnect_triggered()
     ui->startButton->setEnabled(1);
     ui->resetButton->setEnabled(1);
     ui->stopButton->setEnabled(1);
-
     ui->menuARX->setEnabled(1);
-
-    facade->setNetworkMode(NetworkMode::Offline);
-
 }
 

@@ -57,10 +57,8 @@ private slots:
 
     void on_actionConnect_triggered();
 
+public slots:
     void on_actionDisconnect_triggered();
-
-
-
 private:
     Ui::MainWindow *ui;
     Facade *facade;
@@ -71,6 +69,8 @@ private:
     double noiseField = 0;
     Network *networkHandler = nullptr;
     DialogNetwork *dialogNetwork = nullptr;
-
+    void blockARXControls();
+    void blockRegulatorControls();
+    void unlockControls();
 };
 #endif // MAINWINDOW_H

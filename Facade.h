@@ -87,6 +87,7 @@ public:
     std::vector<std::tuple<double, double, double, double>> getHistory();
 
     void setNetworkMode(NetworkMode mode);
+    NetworkMode getNetworkMode();
 private slots:
 public slots:
     void onNetworkControl(double value, double time, double gen);

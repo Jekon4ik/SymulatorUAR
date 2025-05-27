@@ -279,11 +279,13 @@ public:
         formLayout_2->setObjectName("formLayout_2");
         manualRadioButton = new QRadioButton(centralwidget);
         manualRadioButton->setObjectName("manualRadioButton");
+        manualRadioButton->setChecked(true);
 
         formLayout_2->setWidget(0, QFormLayout::LabelRole, manualRadioButton);
 
         constantDoubleSpinBox = new QDoubleSpinBox(centralwidget);
         constantDoubleSpinBox->setObjectName("constantDoubleSpinBox");
+        constantDoubleSpinBox->setValue(5.000000000000000);
 
         formLayout_2->setWidget(0, QFormLayout::FieldRole, constantDoubleSpinBox);
 

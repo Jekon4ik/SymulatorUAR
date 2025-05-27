@@ -30,6 +30,7 @@ public slots:
 signals:
     void controlValueReceived(double value, double time, double gen);
     void measuredValueReceived(double value);
+    void disconnectedByPeer();
 private:
     QTcpSocket *socket = nullptr;
     QTcpServer *server = nullptr;
