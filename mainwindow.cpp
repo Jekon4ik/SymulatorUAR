@@ -260,6 +260,10 @@ void MainWindow::on_stopButton_clicked()
 
 void MainWindow::on_resetButton_clicked()
 {
+    if(dialogNetwork->getNetworkMode() == NetworkMode::Client)
+    {
+        networkHandler->sendResetRequest();
+    }
     facade->stopSimulation();
     facade->resetSimulation();
     ui->mainPlot->graph(0)->data()->clear();
@@ -383,6 +387,8 @@ void MainWindow::on_actionConnect_triggered()
             connect(facade, &Facade::sendMeasuredValue,
                     networkHandler, &Network::sendMeasuredValue);
             connect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
+            connect(networkHandler, &Network::resetReceived, this, &MainWindow::onResetReceived);
+
             facade->setStatus(ui->label_13);
             ui->errorPlot->setVisible(false);
             ui->pidPlot->graph(0)->setVisible(true);
@@ -430,6 +436,7 @@ void MainWindow::on_actionDisconnect_triggered()
         disconnect(facade, &Facade::sendMeasuredValue,
                 networkHandler, &Network::sendMeasuredValue);
         disconnect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
+        disconnect(networkHandler, &Network::disconnectedByPeer, this, &MainWindow::on_actionDisconnect_triggered);
         unlockControls();
         facade->setNetworkMode(NetworkMode::Offline);
     }
@@ -463,6 +470,10 @@ void MainWindow::blockARXControls()
 void MainWindow::blockRegulatorControls()
 {
     ui->menuARX->setEnabled(0);
+}
+void MainWindow::onResetReceived()
+{
+    on_resetButton_clicked();
 }
 void MainWindow::unlockControls()
 {

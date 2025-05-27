@@ -111,7 +111,17 @@ void Network::onDisconnected()
     }
     emit disconnectedByPeer();
 }
-
+void Network::sendResetRequest()
+{
+    if (socket && socket->state() == QAbstractSocket::ConnectedState) {
+        QJsonObject pkt;
+        pkt["reset"] = true;
+        QByteArray out = QJsonDocument(pkt).toJson(QJsonDocument::Compact) + '\n';
+        socket->write(out);
+        socket->flush();
+        updateStatus("Reset request sent");
+    }
+}
 void Network::sendControlledValue(double value, double time, double gen)
 {
     qDebug() << "Send controlled value";
@@ -149,6 +159,10 @@ void Network::onDataReady()
             double y = obj["measuredValue"].toDouble();
             updateStatus("Measured received: " + QString::number(y));
             emit measuredValueReceived(y);
+        }
+        else if (obj.contains("reset") && obj["reset"].toBool()) {
+            updateStatus("Reset request received");
+            emit resetReceived();
         }
     }
 }

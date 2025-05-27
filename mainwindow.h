@@ -73,6 +73,7 @@ private:
     void blockARXControls();
     void blockRegulatorControls();
     void unlockControls();
+    void onResetReceived();
 
 };
 #endif // MAINWINDOW_H

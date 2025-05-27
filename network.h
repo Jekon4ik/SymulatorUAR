@@ -28,10 +28,12 @@ private slots:
 public slots:
     void sendControlledValue(double value, double time, double gen);
     void sendMeasuredValue(double value);
+    void sendResetRequest();
 signals:
     void controlValueReceived(double value, double time, double gen);
     void measuredValueReceived(double value);
     void disconnectedByPeer();
+     void resetReceived();
 private:
 
     QTcpServer *server = nullptr;
